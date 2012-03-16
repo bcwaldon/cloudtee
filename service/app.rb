@@ -1,7 +1,7 @@
 require 'sinatra'
 
 get '/' do
-    "<center><img src='/logo.png'/><br><pre>pip install cloudtee\ndpkg -l | cloudtee packages\nvisit <a href='/packages'>http://cloudtee.me/packages</a></pre></center>"
+    "<center><img src='/logo.png'/><br><pre>1. pip install cloudtee\n2. dpkg -l | cloudtee packages\n3. visit <a href='/packages'>http://cloudtee.me/packages</a></pre></center>"
 end
 
 $pages = {}
