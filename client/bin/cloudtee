@@ -1,0 +1,77 @@
+#!env python
+
+import argparse
+import httplib
+import os.path
+import sys
+import urlparse
+
+
+def read_stream(stream):
+    for line in stream.readlines():
+        yield line.rstrip('\n')
+
+
+class HTTPRequester(object):
+    def __init__(self, connection_str, base_url, slug):
+        self._conn = None
+        self.connection_str = connection_str
+        self.request_uri = os.path.join(base_url, slug)
+
+    @property
+    def conn(self):
+        if not self._conn:
+            self._conn = httplib.HTTPConnection(self.connection_str)
+        return self._conn
+
+    def send(self, data):
+        self.conn.request('POST', self.request_uri, data)
+        self.conn.getresponse()
+
+
+def http_connect(api_endpoint, slug):
+    parts = urlparse.urlparse(api_endpoint)
+
+    if parts.scheme != 'http':
+        print 'ERROR: Only http is supported!'
+        sys.exit(1)
+
+    return HTTPRequester(parts.netloc, '/', slug)
+
+
+def _send_message(message, http_conn):
+    body = '\n'.join(message)
+    http_conn.send(body)
+
+
+def send_data(data, message_size, http_conn):
+    total_size = 0
+    message = []
+
+    for line in data:
+        total_size += len(line)
+        message.append(line)
+        if total_size > message_size:
+            _send_message(message, http_conn)
+            message = []
+            total_size = 0
+
+    if total_size:
+        _send_message(message, http_conn)
+
+
+
+def get_options():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('slug', type=str)
+    parser.add_argument('--api-endpoint', type=str, default='http://cloudtee.me')
+    parser.add_argument('--message-size', type=int, default=1024)
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = get_options()    
+
+    stream = read_stream(sys.stdin)
+    http_conn = http_connect(args.api_endpoint, args.slug) 
+    send_data(stream, args.message_size, http_conn)
