@@ -1,14 +1,16 @@
 require 'sinatra'
 
 get '/' do
-    "<center><img src='/logo.png'/><br><pre>1. pip install cloudtee\n2. dpkg -l | cloudtee packages\n3. visit <a href='/packages'>http://cloudtee.me/packages</a></pre></center>"
+    puts 'request made'
+    erb :index
 end
 
 $pages = {}
 
 get '/:page' do
-    page = $pages[params[:page]] || []
-    "<pre>#{page.join("\n")}</pre>"
+    @page = $pages[params[:page]] || []
+    @xhr = request.xhr?
+    erb :show, :layout => !@xhr
 end
 
 post '/:page' do

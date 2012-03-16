@@ -1,0 +1,5 @@
+<% if @xhr %>
+  <%=@page.join("\n")%>
+<% else %>
+  <pre data-updateable="true"><%=@page.join("\n")%></pre>
+<% end %>
