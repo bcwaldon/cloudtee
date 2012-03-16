@@ -1,0 +1,7 @@
+cloudtee
+
+do_stuff | cloudtee foo
+
+like tee but to the cloud instead of a file
+
+then you can watch http://cloudtee.me/foo to see new logs LIVE
