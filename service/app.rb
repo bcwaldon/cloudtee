@@ -1,7 +1,5 @@
 require 'sinatra'
 
-set :public_folder, 'public'
-
 get '/' do
     "<center><img src='/logo.png'/></center>"
 end
