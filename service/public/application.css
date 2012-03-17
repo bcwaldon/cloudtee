@@ -1,13 +1,140 @@
+/* @override http://looce.com:9292/application.css */
+
 body {
-  font-size: 14px;
-  line-height: 22px;
-  font-family: "Monaco", monospace;
-  color: #333;
+	background: #294143 url(body_bg.png) repeat-y left;
+	font-family: "Anivers", "Lucida Grande", sans-serif;
+	font-size: 14px;
+	line-height: 22px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+
+header a {
+	color: #fff;
+	text-decoration: none;
 }
 
 pre {
-  padding: 10px;
-  background: #f1f1f1;
-  border: 1px solid #e1e1e1;
-  margin: 25px;
+	font-size: 12px;
+	line-height: 22px;
+	font-family: "Monaco", monospace;
+	color: #333;
+	padding: 10px;
+	background: #f1f1f1;
+	border: 1px solid #e1e1e1;
+	margin: 10px;
+}
+
+h1#logo a{
+	background: url(logo.png) top left no-repeat;
+	display: block;
+	width: 99px;
+	height: 78px;
+	text-indent: -9999px;
+	margin: 0 auto;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+
+header {
+	width: 200px;
+	color: #fff;
+	background: #324f52;
+	float: left;
+}
+
+.user_settings a {
+	color: #a6babc;
+}
+
+.user_settings a:hover {
+	text-decoration: underline;
+}
+
+.user_settings {
+	float: left;
+	width: 100%;
+	margin-bottom: 20px;
+	opacity: 0.5;
+}
+
+.user_settings:hover {
+	opacity: 1;
+}
+
+.user_settings img {
+	float: left;
+	padding: 10px;
+}
+
+.user_settings .username {
+	display: block;
+	float: left;
+	margin-top: 15px;
+	width: 65%;
+}
+
+.user_settings ul li {
+	float: left;
+	margin-right: 10px;
+}
+
+li {
+	list-style: none;
+}
+
+#user_topics li a {
+	display: block;
+	float: right;
+	width: 165px;
+	padding: 10px;
+	border: 2px solid transparent;
+	border-right: none;
+	
+}
+
+#user_topics li a.active {
+	background: #294143;
+	border: 2px solid #375659;
+	border-right: 0;
+}
+
+#user_topics li a.active:hover {
+	color: #fff;
+}
+
+#user_topics li a:hover {
+	color: #c2edf2;
+}
+
+#content {
+	background: #fff;
+	padding: 0 0 25px 200px;
+}
+
+#topbar {
+	background: url(topbar.png) top left repeat-x;
+	padding-top: 10px;
+	padding-left: 25px;
+	height: 40px;
+	margin-bottom: 30px;
+}
+
+#topbar form {
+	float: right;
+	margin-right: 22px;
+}
+
+#topbar h3 {
+	float: left;
+}
+
+#topbar h3 a {
+	color: #444;
+}
+.clear {
+	clear: both;
 }

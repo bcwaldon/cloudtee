@@ -3,16 +3,49 @@
   <head>
     <meta charset="utf-8">
     <title>CloudTee</title>
-    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/bootstrap.css" />
     <link rel="stylesheet" href="/application.css" />
     <script src="/jquery-1.7.1.min.js"></script>
     <script src="/application.js"></script>
   </head>
   <body>
     <header>
+      <h1 id="logo"><a href="#">CloudTee</a></h1>
+      <div class="user_settings">
+        <img src="user_avatar.png" width="48" alt="Username" />
+        <span class="username">Jake Dahn</span>
+        <ul>
+          <li><a href="#">Settings</a></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </div>
+
+      <nav id="user_topics">
+        <li><a class="active" href="#">Topic 1</a></li>
+        <li><a href="#">Topic 2</a></li>
+        <li><a href="#">Topic 3</a></li>
+      </nav>
     </header>
 
-    <div role="main">
+    <div id="content" role="main">
+      <div id="topbar">
+        <h3><a href="#">Topic 1</a></h3>
+        
+        <form class="search" action="#" method="post">
+          <div class="input-prepend">
+            <i class="icon-search"></i>
+            <input type="text" name="search" value="" id="search" class="input-medium"/>
+          </div>
+        </form>
+
+        <form class="scrollback" action="#" method="post">
+          <div class="input-prepend">
+            <i class="icon-repeat"></i>
+            <input type="text" name="scrollback" value="" id="scrollback" class="input-mini"/>
+          </div>
+          
+        </form>
+      </div>
       <%= yield %>
     </div>
 
