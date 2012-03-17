@@ -33,6 +33,11 @@ name will be used.
 
 Use this to override the flavor used during server creation.
 
+* CT\_USER=ubuntu
+
+Fabric needs a username for remote ssh commands with passwordless sudo 
+privileges, we default to ubuntu.
+
 `deploy` will copy the local source code to a host defined in the CT\_HOST
 environment variable.
 

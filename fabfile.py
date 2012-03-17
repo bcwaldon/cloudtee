@@ -4,7 +4,7 @@ import sys
 import fabric.api
 
 
-fabric.api.env.user = 'ubuntu'
+fabric.api.env.user = os.environ.get('CT_USER', 'ubuntu')
 fabric.api.env.hosts = [os.environ.get('CT_HOST')]
 
 
