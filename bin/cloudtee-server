@@ -1,10 +1,14 @@
 #!env python
 
-import eventlet
-from eventlet.green import socket
 import struct
 
+import eventlet
+from eventlet.green import socket
+import pymongo
+
 PORT = 8080
+
+db = pymongo.Connection().cloudtee
 
 
 class Topic(object):
@@ -106,6 +110,7 @@ def myhandle(client, client_addr):
 
         line = reader.readline()
         while line:
+            db.lines.insert({'topic': name, 'payload': line})
             topic.send(line)
             line = reader.readline()
         client.close()
