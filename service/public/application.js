@@ -2,7 +2,7 @@ $(function(){
 
   if ($('pre').data().updateable) {
     setInterval(function(){
-      $.get('/zomgwtfbbq', function(res){
+      $.get(window.location.pathname, function(res){
         $('pre').text(res)
       })
       console.log('ran')
