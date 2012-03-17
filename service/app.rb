@@ -1,4 +1,3 @@
-require 'pry'
 require 'sinatra'
 
 get '/' do
@@ -11,9 +10,6 @@ $pages = {}
 get '/:page' do
   @page = $pages[params[:page]] || []
   @xhr = request.xhr?
-  unless @xhr
-    binding.pry
-  end
   erb :show, :layout => !@xhr
   
 end
