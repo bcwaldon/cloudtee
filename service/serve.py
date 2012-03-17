@@ -1,17 +1,32 @@
 import eventlet
+from eventlet.green import socket
+
+
+PORT = 8080
 
 
 class Topic(object):
-    def __init__(self):
-        self.clients = []
+    def __init__(self, name):
+        self.name = name
+        self.clients = set()
 
     def subscribe(self, client):
-        self.clients.append(client)
+        write = client.makefile('w')
+        print 'subscribe(%s) %s' % (self.name, write)
+        self.clients.add(write)
 
     def send(self, msg):
-        msg += "\n"
+        print 'send(%s) %s to %s' % (self.name, msg[:-1], self.clients)
         for c in self.clients:
-            c.sendall(msg)
+            try:
+                c.write(msg)
+                c.flush()
+            except socket.error, e:
+                print 'doh'
+                if e[0] != 32:
+                    print 'remove(%s) %s' % (self.name, c)
+                    self.clients.remove(c)
+                    raise
 
 
 topics = {}
@@ -19,37 +34,30 @@ topics = {}
 
 def myhandle(client, client_addr):
     print "client connected", client_addr
-    buf = client.recv(1024)
-    if buf.startswith('GET /'):
-        name = buf.split(' ')[1][1:]
+
+    reader = new_sock.makefile('r')
+    line = reader.readline()
+    name = line.split(' ')[1].strip()
+
+    if line.startswith('GET /'):
+        name = name[1:]
         if not name in topics:
-            topics[name] = Topic()
+            topics[name] = Topic(name)
         topic = topics[name]
         topic.subscribe(client)
-        print 'SUBSCRIBE %s' % name
     else:
-        topic_line = buf.split('\n')[0]
-        name = topic_line.split(' ')[1]
-        print 'SEND %s' % name
         if not name in topics:
-            topics[name] = Topic()
+            topics[name] = Topic(name)
         topic = topics[name]
 
-        # topic.send('hello world')
-        # remove the first line from buffer
-        buf = buf[buf.index("\n") + 1:]
-        topic.send(buf)
-        while True:
-            buf += client.recv(1)
-            while "\n" in buf:
-                topic.send(buf[:buf.index("\n")])
-                buf = buf[buf.index("\n") + 1:]
-            else:
-                break
-        print 'done?'
+        line = reader.readline()
+        while line:
+            topic.send(line)
+            line = reader.readline()
+        client.close()
 
 
-server = eventlet.listen(('0.0.0.0', 8080))
+server = eventlet.listen(('0.0.0.0', PORT))
 pool = eventlet.GreenPool(10000)
 while True:
     new_sock, address = server.accept()
