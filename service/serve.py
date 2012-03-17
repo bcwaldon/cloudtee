@@ -8,12 +8,12 @@ PORT = 8080
 class Topic(object):
     def __init__(self, name):
         self.name = name
-        self.clients = set()
+        self.clients = []
 
     def subscribe(self, client):
         write = client.makefile('w')
         print 'subscribe(%s) %s' % (self.name, write)
-        self.clients.add(write)
+        self.clients.append(write)
 
     def send(self, msg):
         print 'send(%s) %s to %s' % (self.name, msg[:-1], self.clients)
@@ -22,11 +22,10 @@ class Topic(object):
                 c.write(msg)
                 c.flush()
             except socket.error, e:
-                print 'doh'
-                if e[0] != 32:
-                    print 'remove(%s) %s' % (self.name, c)
-                    self.clients.remove(c)
+                if e[0] != 32:  # broken pipe
                     raise
+                print 'remove(%s) %s' % (self.name, c)
+                self.clients.remove(c)
 
 
 topics = {}
