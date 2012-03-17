@@ -1,0 +1,24 @@
+<h1>hi</h1>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+var ws;
+
+$(document).ready(function() {
+  console.log('start')
+  ws = new WebSocket("ws://50.56.12.248:8080/foo");
+  ws.onerror = function(event) {
+    console.log('error', event)
+  }
+  ws.onopen = function(event) {
+    console.log('open', event)
+  }
+  ws.onmessage = function(event) {
+    console.log('message', event.data)
+  }
+  ws.onclose = function(event) {
+    console.log('close', event)
+  }
+  console.log('finish')
+});
+
+</script>
