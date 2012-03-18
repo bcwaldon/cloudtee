@@ -54,7 +54,8 @@ def provision():
     userdata = """#!/bin/sh
 
 sudo apt-get update
-sudo apt-get install -y python-pip python-eventlet"""
+sudo apt-get install -y python-pip python-eventlet mongodb python-pymongo
+sudo service mongodb start"""
 
     server = client.servers.create('cloudtee', image, flavor,
                                    key_name=key_name,
@@ -88,7 +89,6 @@ def deploy():
     # unzip and install
     with fabric.api.cd('/tmp/cloudtee'):
         fabric.api.run('tar xzf /tmp/%s.tar.gz' % pkg_name)
-        fabric.api.run('ls')
 
     with fabric.api.cd('/tmp/cloudtee/%s' % pkg_name):
         fabric.api.run('sudo python setup.py install')

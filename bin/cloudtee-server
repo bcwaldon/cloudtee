@@ -8,7 +8,9 @@ import pymongo
 
 PORT = 8080
 
-db = pymongo.Connection().cloudtee
+
+def mongo_connect():
+    return pymongo.Connection().cloudtee.lines
 
 
 class Topic(object):
@@ -59,6 +61,11 @@ class Topic(object):
                 else:
                     self.raw.remove(c)
 
+    def get_scrollback(self):
+        db = mongo_connect()
+        lines = db.find({'topic': self.name})
+        return [line['payload'] for line in lines]
+
 
 topics = {}
 
@@ -103,6 +110,12 @@ def myhandle(client, client_addr):
             topic.subscribe_ws(writer)
         else:
             topic.subscribe_raw(writer)
+
+        scrollback = topic.get_scrollback()
+        for line in scrollback:
+            writer.write(line)
+            writer.flush()
+
     else:
         if not name in topics:
             topics[name] = Topic(name)
@@ -110,7 +123,7 @@ def myhandle(client, client_addr):
 
         line = reader.readline()
         while line:
-            db.lines.insert({'topic': name, 'payload': line})
+            mongo_connect().insert({'topic': name, 'payload': line})
             topic.send(line)
             line = reader.readline()
         client.close()
